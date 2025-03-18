@@ -6,7 +6,7 @@ const AEM_PASSWORD = 'pat';
 const AEM_HOST = 'https://author-p151259-e1559157.adobeaemcloud.com';
 
 // URL of the folder in AEM DAM
-const targetUrl = `${AEM_HOST}/content/dam/test1`;
+const targetUrl = `${AEM_HOST}/content/dam/test2-patwashere-1`;
 
 const credentials = Buffer.from(`${AEM_USERNAME}:${AEM_PASSWORD}`).toString('base64')
 
@@ -42,6 +42,21 @@ const options = new DirectBinary.DirectBinaryUploadOptions()
         }
     })
 
+upload.on('foldercreated', (folderName, targetParent, targetFolder) => {
+    console.log(`foldercreated was called ${folderName}, ${targetParent}, ${targetFolder}`);
+});
+
+upload.on('fileend', data => {
+    const { fileName } = data;
+
+    console.log(`fileend with ${fileName}`);
+});
+
+upload.on('filestart', data => {
+    const { fileName } = data;
+
+    console.log(`filestart with ${fileName}`);
+});
 // Upload the files
 upload.uploadFiles(options)
     .then(result => {
