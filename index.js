@@ -1,29 +1,17 @@
 const fs = require('fs'); // Required to get actual file sizes
 const DirectBinary = require('@adobe/aem-upload');
 
-<<<<<<< HEAD
 const AEM_USERNAME = 'testadobe';
 const AEM_PASSWORD = 'testadobe';
-const AEM_HOST = 'https://author-pxxxxx-exxxxx.adobeaemcloud.com';
+const AEM_HOST = 'https://author-p11102-e1347956.adobeaemcloud.com';
 
 // URL of the folder in AEM DAM
 const targetUrl = `${AEM_HOST}/content/dam/test321`;
-=======
-const AEM_USERNAME = 'pat';
-const AEM_PASSWORD = 'pat';
-const AEM_HOST = 'https://author-p151259-e1559157.adobeaemcloud.com';
-
-// URL of the folder in AEM DAM
-const targetUrl = `${AEM_HOST}/content/dam/test2-patwashere-1`;
-
-const credentials = Buffer.from(`${AEM_USERNAME}:${AEM_PASSWORD}`).toString('base64')
->>>>>>> 48f3f39a0d604f3e896886ee6bd04d14c4c80e66
 
 // Correct file paths (Ensure proper escaping for Windows paths)
 const filePaths = [
-    "/Users/patriquelegault/Documents/samples/birdy1.jpeg",
-    "/Users/patriquelegault/Documents/samples/bird2.jpg",
-    "/Users/patriquelegault/Documents/samples/birdy3.jpeg"
+    "C:\\Users\\vramireddy\\Documents\\AEMUPLOAD\\DALL·E 2025-03-14 22.56.34.webp",
+    "C:\\Users\\vramireddy\\Pictures\\Screenshots\\Screenshot 2024-10-21 141218.png"
 ];
 
 // Dynamically get file sizes
@@ -35,7 +23,7 @@ const uploadFiles = filePaths.map(filePath => ({
 }));
 
 // Encode authentication credentials
-const authHeader = `Basic ${credentials}`;
+const authHeader = 'Basic ' + Buffer.from(`${AEM_USERNAME}:${AEM_PASSWORD}`).toString('base64');
 
 // Create an instance of DirectBinaryUpload with authentication headers
 const upload = new DirectBinary.DirectBinaryUpload({
@@ -52,21 +40,6 @@ const options = new DirectBinary.DirectBinaryUploadOptions()
         }
     })
 
-upload.on('foldercreated', (folderName, targetParent, targetFolder) => {
-    console.log(`foldercreated was called ${folderName}, ${targetParent}, ${targetFolder}`);
-});
-
-upload.on('fileend', data => {
-    const { fileName } = data;
-
-    console.log(`fileend with ${fileName}`);
-});
-
-upload.on('filestart', data => {
-    const { fileName } = data;
-
-    console.log(`filestart with ${fileName}`);
-});
 // Upload the files
 upload.uploadFiles(options)
     .then(result => {
