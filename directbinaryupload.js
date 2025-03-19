@@ -1,4 +1,5 @@
 const fs = require('fs'); // Required to get actual file sizes
+const path = require('path');
 const DirectBinary = require('@adobe/aem-upload');
 
 const AEM_USERNAME = 'testadobe';
@@ -6,12 +7,11 @@ const AEM_PASSWORD = 'testadobe';
 const AEM_HOST = 'https://author-p11102-e1347956.adobeaemcloud.com';
 
 // URL of the folder in AEM DAM
-const targetUrl = `${AEM_HOST}/content/dam/test321`;
+const targetUrl = `${AEM_HOST}/content/dam/sample-1234`;
 
 // Correct file paths (Ensure proper escaping for Windows paths)
 const filePaths = [
-    "C:\\Users\\vramireddy\\Documents\\AEMUPLOAD\\DALL·E 2025-03-14 22.56.34.webp",
-    "C:\\Users\\vramireddy\\Pictures\\Screenshots\\Screenshot 2024-10-21 141218.png"
+    `${__dirname}${path.sep}bird123.jpg`
 ];
 
 // Dynamically get file sizes
@@ -26,9 +26,19 @@ const uploadFiles = filePaths.map(filePath => ({
 const authHeader = 'Basic ' + Buffer.from(`${AEM_USERNAME}:${AEM_PASSWORD}`).toString('base64');
 
 // Create an instance of DirectBinaryUpload with authentication headers
-const upload = new DirectBinary.DirectBinaryUpload({
-    headers: { Authorization: authHeader }
-});
+const upload = new DirectBinary.DirectBinaryUpload();
+
+upload.on('fileuploadstart', (event) => {
+    console.log('fileuploadstart ' + JSON.stringify(event));
+})
+
+upload.on('fileuploadend', (event) => {
+    console.log('fileuploadend ' + JSON.stringify(event));
+})
+
+upload.on('foldercreated', (event) => {
+    console.log('foldercreated ' + JSON.stringify(event));
+})
 
 // Configure upload options with replace enabled
 const options = new DirectBinary.DirectBinaryUploadOptions()
